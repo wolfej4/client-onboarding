@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Client Onboarding Checklist Generator</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar no-print">
+  <h1>Client Onboarding Checklist Generator</h1>
+  <nav class="actions">
+    <select id="profileSelect" aria-label="Load profile">
+      <option value="">— Load profile —</option>
+    </select>
+    <button type="button" id="loadBtn">Load</button>
+    <button type="button" id="saveBtn">Save profile</button>
+    <button type="button" id="deleteBtn" class="danger">Delete</button>
+    <button type="button" id="newBtn">New</button>
+    <button type="button" id="exportJsonBtn">Export JSON</button>
+    <label class="filebtn">
+      Import JSON
+      <input type="file" id="importJsonInput" accept="application/json" hidden />
+    </label>
+  </nav>
+</header>
+
+<main class="layout">
+  <!-- ============== INTAKE FORM ============== -->
+  <section id="intake" class="panel no-print" aria-label="Client intake">
+    <form id="clientForm">
+
+      <fieldset>
+        <legend>Client basics</legend>
+        <div class="grid">
+          <label>Company name <input name="company" required /></label>
+          <label>Industry
+            <select name="industry">
+              <option value="">—</option>
+              <option>Professional services</option>
+              <option>Healthcare</option>
+              <option>Legal</option>
+              <option>Financial services</option>
+              <option>Manufacturing</option>
+              <option>Non-profit</option>
+              <option>Construction</option>
+              <option>Retail</option>
+              <option>Education</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Headcount <input name="headcount" type="number" min="0" /></label>
+          <label>Locations <input name="locations" type="number" min="0" value="1" /></label>
+          <label>Primary contact <input name="primaryContact" /></label>
+          <label>Primary contact email <input name="primaryContactEmail" type="email" /></label>
+          <label>Billing contact <input name="billingContact" /></label>
+          <label>After-hours contact <input name="afterHoursContact" /></label>
+          <label class="full">Compliance needs
+            <input name="compliance" placeholder="HIPAA, PCI-DSS, SOC 2, CMMC, GDPR…" />
+          </label>
+          <label class="full">Notes <textarea name="basicsNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Endpoints</legend>
+        <div class="grid">
+          <label>Windows workstations <input name="winCount" type="number" min="0" value="0" /></label>
+          <label>macOS workstations <input name="macCount" type="number" min="0" value="0" /></label>
+          <label>Linux workstations <input name="linuxCount" type="number" min="0" value="0" /></label>
+          <label>Mobile devices (managed) <input name="mobileCount" type="number" min="0" value="0" /></label>
+          <label>Servers on-prem <input name="serverCount" type="number" min="0" value="0" /></label>
+          <label>RMM tool
+            <select name="rmm">
+              <option value="">—</option>
+              <option>NinjaOne</option>
+              <option>Datto RMM</option>
+              <option>ConnectWise Automate</option>
+              <option>N-able N-central</option>
+              <option>Atera</option>
+              <option>Kaseya VSA</option>
+              <option>Syncro</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>MDM tool
+            <select name="mdm">
+              <option value="">—</option>
+              <option>Intune</option>
+              <option>Jamf</option>
+              <option>Kandji</option>
+              <option>Mosyle</option>
+              <option>Google Endpoint Management</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>Patch cadence
+            <select name="patchCadence">
+              <option>Weekly</option>
+              <option>Bi-weekly</option>
+              <option>Monthly</option>
+              <option>Ad-hoc</option>
+            </select>
+          </label>
+          <label class="full">Endpoint notes <textarea name="endpointNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Networking</legend>
+        <div class="grid">
+          <label>ISP(s) <input name="isp" /></label>
+          <label>Static IPs? <select name="staticIp"><option>No</option><option>Yes</option></select></label>
+          <label>Firewall vendor
+            <select name="firewall">
+              <option value="">—</option>
+              <option>Fortinet</option>
+              <option>SonicWall</option>
+              <option>Meraki</option>
+              <option>Palo Alto</option>
+              <option>WatchGuard</option>
+              <option>Ubiquiti</option>
+              <option>pfSense/OPNsense</option>
+              <option>Cisco</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Switch vendor <input name="switch" /></label>
+          <label>WiFi vendor <input name="wifi" /></label>
+          <label>VLANs in use <select name="vlans"><option>No</option><option>Yes</option><option>Unknown</option></select></label>
+          <label>VPN type
+            <select name="vpn">
+              <option value="">—</option>
+              <option>SSL VPN</option>
+              <option>IPsec S2S</option>
+              <option>WireGuard</option>
+              <option>Tailscale / ZTNA</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>DNS filtering
+            <select name="dnsFilter">
+              <option value="">—</option>
+              <option>Cisco Umbrella</option>
+              <option>DNSFilter</option>
+              <option>Cloudflare Gateway</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label class="full">Networking notes <textarea name="networkNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Identity</legend>
+        <div class="grid">
+          <label>Primary directory
+            <select name="directory">
+              <option value="">—</option>
+              <option>Entra ID (Azure AD) only</option>
+              <option>Active Directory on-prem</option>
+              <option>Hybrid AD + Entra</option>
+              <option>Google Workspace</option>
+              <option>Okta</option>
+              <option>JumpCloud</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>MFA
+            <select name="mfa">
+              <option value="">—</option>
+              <option>Enforced all users</option>
+              <option>Admins only</option>
+              <option>Partial</option>
+              <option>Not deployed</option>
+            </select>
+          </label>
+          <label>SSO provider <input name="sso" /></label>
+          <label>Privileged access management <input name="pam" placeholder="CyberArk, Delinea, Hudu Vault, none" /></label>
+          <label>Password manager <input name="passwordMgr" placeholder="Keeper, 1Password, Bitwarden, ITGlue, Hudu…" /></label>
+          <label>Conditional access configured <select name="conditionalAccess"><option>No</option><option>Yes</option><option>Unknown</option></select></label>
+          <label class="full">Identity notes <textarea name="identityNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Cloud services</legend>
+        <div class="grid">
+          <label>Productivity suite
+            <select name="productivity">
+              <option value="">—</option>
+              <option>Microsoft 365</option>
+              <option>Google Workspace</option>
+              <option>Both</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>M365 plan <input name="m365Plan" placeholder="Business Standard, BP, E3, E5…" /></label>
+          <label>Tenants count <input name="tenants" type="number" min="0" value="1" /></label>
+          <label>IaaS
+            <select name="iaas" multiple size="4">
+              <option>AWS</option>
+              <option>Azure</option>
+              <option>GCP</option>
+              <option>DigitalOcean</option>
+              <option>On-prem only</option>
+            </select>
+          </label>
+          <label class="full">Key SaaS apps
+            <textarea name="saas" rows="2" placeholder="QuickBooks Online, Salesforce, HubSpot, DocuSign, Slack…"></textarea>
+          </label>
+          <label class="full">Line-of-business apps
+            <textarea name="lob" rows="2" placeholder="Industry-specific apps, on-prem databases, licensing portals…"></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Backup</legend>
+        <div class="grid">
+          <label>Workstation backup
+            <select name="endpointBackup">
+              <option value="">—</option>
+              <option>Datto Endpoint Backup</option>
+              <option>Acronis</option>
+              <option>Veeam Agent</option>
+              <option>OneDrive / KFM only</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>Server / image backup
+            <select name="serverBackup">
+              <option value="">—</option>
+              <option>Datto BCDR</option>
+              <option>Veeam</option>
+              <option>Acronis</option>
+              <option>Altaro / Hornetsecurity</option>
+              <option>Unitrends</option>
+              <option>Axcient</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>SaaS / M365 backup
+            <select name="saasBackup">
+              <option value="">—</option>
+              <option>Dropsuite</option>
+              <option>Datto SaaS Protection</option>
+              <option>Veeam for M365</option>
+              <option>Afi</option>
+              <option>SkyKick</option>
+              <option>Barracuda</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>Retention (days) <input name="retention" type="number" min="0" value="90" /></label>
+          <label>Offsite copy? <select name="offsite"><option>Yes</option><option>No</option><option>Unknown</option></select></label>
+          <label>Last known restore test <input name="lastRestore" type="date" /></label>
+          <label class="full">Backup notes <textarea name="backupNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Security</legend>
+        <div class="grid">
+          <label>EDR / antivirus
+            <select name="edr">
+              <option value="">—</option>
+              <option>SentinelOne</option>
+              <option>CrowdStrike</option>
+              <option>Huntress</option>
+              <option>Bitdefender</option>
+              <option>Microsoft Defender for Business</option>
+              <option>Sophos</option>
+              <option>Webroot</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>MDR / SOC <input name="mdr" placeholder="Huntress MDR, Blackpoint, Arctic Wolf, none" /></label>
+          <label>Email security
+            <select name="emailSec">
+              <option value="">—</option>
+              <option>Defender for O365</option>
+              <option>Proofpoint Essentials</option>
+              <option>Mimecast</option>
+              <option>Avanan / Check Point</option>
+              <option>IRONSCALES</option>
+              <option>None</option>
+            </select>
+          </label>
+          <label>Security awareness training <input name="sat" placeholder="KnowBe4, Hook, Breach Secure Now…" /></label>
+          <label>Dark web / breach monitoring <select name="darkWeb"><option>No</option><option>Yes</option></select></label>
+          <label>Vulnerability scanning <select name="vulnScan"><option>No</option><option>Yes</option></select></label>
+          <label>Insurance questionnaire on file <select name="cyberIns"><option>No</option><option>Yes</option></select></label>
+          <label class="full">Security notes <textarea name="securityNotes" rows="2"></textarea></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Scope — what they're paying for</legend>
+        <div class="grid">
+          <label>Agreement type
+            <select name="agreement">
+              <option>Fully managed</option>
+              <option>Co-managed</option>
+              <option>Block hours</option>
+              <option>Project only</option>
+              <option>Per-device</option>
+              <option>Per-user</option>
+            </select>
+          </label>
+          <label>Monthly recurring $ <input name="mrr" type="number" min="0" step="0.01" /></label>
+          <label>Response SLA <input name="sla" placeholder="1hr P1, 4hr P2, NBD P3" /></label>
+          <label>Business hours <input name="hours" placeholder="Mon–Fri 8–5 CT" /></label>
+          <label>After-hours coverage <select name="afterHours"><option>No</option><option>Yes</option><option>On-call</option></select></label>
+          <label>On-site included <select name="onsite"><option>No</option><option>Yes</option><option>Billable</option></select></label>
+          <label class="full">Included services
+            <textarea name="included" rows="3" placeholder="Helpdesk, patching, backup admin, M365 admin, vCIO quarterly…"></textarea>
+          </label>
+          <label class="full">Explicitly excluded
+            <textarea name="excluded" rows="2" placeholder="Hardware replacement, 3rd-party app support, cabling…"></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="formactions">
+        <button type="button" id="generateBtn" class="primary">Generate checklist</button>
+        <button type="reset" id="resetBtn">Clear form</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============== OUTPUT ============== -->
+  <section id="output" class="panel" aria-label="Generated SOP">
+    <div class="outputbar no-print">
+      <button type="button" id="editToggle">Edit output</button>
+      <button type="button" id="saveEditsBtn" hidden>Save edits &amp; learn</button>
+      <button type="button" id="printBtn" class="primary">Export to PDF</button>
+      <span id="prefHint" class="hint"></span>
+    </div>
+    <article id="sop" class="sop">
+      <p class="empty">Fill in the form on the left and click <strong>Generate checklist</strong> to produce a tailored onboarding SOP.</p>
+    </article>
+  </section>
+</main>
+
+<script src="generator.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
